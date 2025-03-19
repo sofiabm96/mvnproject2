@@ -31,7 +31,7 @@ jobs:
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws ecr get-login-password --region {AWS_REGION} | docker login --username AWS --password-stdin {AWS_ECR_URL}
+          aws ecr get-login-password --region {env.AWS_REGION} | docker login --username AWS --password-stdin {AWS_ECR_URL}
 
       - name: Construir y subir Docker a ECR
         run: |
