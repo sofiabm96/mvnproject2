@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Verify Java version
+        run: java -version
+
+      - name: Construir aplicación
+        run: mvn clean package
+
+      - name: Iniciar sesión en AWS ECR
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 412631849822.dkr.ecr.eu-north-1.amazonaws.com
+
+      - name: Construir y subir Docker a ECR
+        run: |
+          docker build -t mi-aplicacion2 .
+          docker tag mi-aplicacion2 412631849822.dkr.ecr.eu-north-1.amazonaws.com/sofia/mvnproject2
+          docker push 412631849822.dkr.ecr.eu-north-1.amazonaws.com/sofia/mvnproject2
