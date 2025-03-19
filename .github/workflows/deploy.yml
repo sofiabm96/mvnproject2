@@ -6,10 +6,9 @@ on:
       - main
 
 env:
-  AWS_ACCOUNT_ID: 412631849822
   AWS_REGION: eu-north-1
   AWS_ECR_REPO: sofia/mvnproject2
-  AWS_ECR_URL: 412631849822.dkr.ecr.{AWS_REGION}.amazonaws.com
+  AWS_ECR_URL: 412631849822.dkr.ecr.${AWS_REGION}.amazonaws.com
 
 jobs:
   build:
